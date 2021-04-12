@@ -4,18 +4,16 @@ import { Loader } from './Loader';
 import { Canvas } from './Canvas';
 import { createVideoTexture } from './utiles';
 import { Player } from './Player';
+import { Transformer } from './Transformer';
 
-interface Entity {
+export interface Lem {
   app: PIXI.Application;
   canvas: Canvas;
   Player: Player;
+  Transformer: Transformer;
 }
 
-export class Lem implements Entity {
-  app: PIXI.Application;
-  canvas: Canvas;
-  Player: Player;
-
+export class Lem {
   private notifyChanges = () => {
     this.canvas.notifyChanges();
   };
@@ -24,6 +22,7 @@ export class Lem implements Entity {
     this.app = null;
     this.canvas = new Canvas();
     this.Player = new Player(this.canvas, this.update);
+    this.Transformer = new Transformer(this.canvas);
   }
 
   attachApp = (ref: HTMLCanvasElement) => {
@@ -40,8 +39,6 @@ export class Lem implements Entity {
     const video = await Loader.loadVideo(file);
     const texture = createVideoTexture(video);
     const resource = this.canvas.createResource(texture, file);
-
-    
 
     this.canvas.addResources(resource);
     this.canvas.load();

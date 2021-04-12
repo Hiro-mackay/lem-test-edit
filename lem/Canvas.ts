@@ -3,7 +3,7 @@ import { Loader } from './Loader';
 import { CanvasEntity, Dispatcher, Resource, Resources, Source } from './types';
 import { getVideoRecource, getVideoDuration, getDeltaStart, getDeltaEnd } from './utiles';
 
-interface Entity extends CanvasEntity {
+export interface Canvas extends CanvasEntity {
   id: number;
   screen: {
     width: number;
@@ -12,19 +12,7 @@ interface Entity extends CanvasEntity {
   dispatch: Dispatcher<CanvasEntity>;
 }
 
-export class Canvas implements Entity {
-  id: number;
-  currentTime: number;
-  viewingTime: number;
-  deltaTime: number;
-  resources: Resources;
-  source: Source;
-  screen: {
-    width: number;
-    height: number;
-  };
-  dispatch: Dispatcher<CanvasEntity>;
-
+export class Canvas {
   private generateID = () => this.id++;
 
   private getViewTime = () => this.resources.reduce((c, resource) => c + resource.outFrame, 0);
@@ -76,6 +64,19 @@ export class Canvas implements Entity {
     this.deltaTime = 0;
     this.currentTime = 0;
     this.notifyChanges();
+  }
+
+  private _resloadResources(resources: Resources) {
+    const res = [];
+    resources.reduce((delta, resource) => {
+      res.push({
+        ...resource,
+        deltaTime: delta
+      });
+      return delta + resource.outFrame;
+    }, 0);
+
+    return res;
   }
 
   constructor() {
@@ -132,6 +133,12 @@ export class Canvas implements Entity {
     this.notifyChanges();
   }
 
+  reloadResources(resources: Resources) {
+    const newResources = this._resloadResources(resources);
+    this.setResources(newResources);
+    this.load();
+  }
+
   createResource(texture: Texture, file: File): Resource {
     const video = getVideoRecource(texture);
 
@@ -175,7 +182,6 @@ export class Canvas implements Entity {
   }
 
   next() {
-    console.log(this.currentTime, this.deltaTime);
     const source = this._load(this.currentTime);
     if (!source?.sprite) return null;
 

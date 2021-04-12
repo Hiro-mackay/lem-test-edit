@@ -76,3 +76,5 @@ export const createSprite = (texture: Texture, screen: { width: number; height: 
   sprite.height = screen.height;
   return sprite;
 };
+
+

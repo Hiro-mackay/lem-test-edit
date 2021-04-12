@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useMemo } from 'react';
 import { useSequenceContext } from '../../context/Sequence';
 
 interface SequenceTimetickProps {
@@ -13,10 +13,14 @@ interface TimetickProps {
 
 export const SequenceTimetick: FC = memo(() => {
   const { timeDuration, sequenceScale, timeTicks } = useSequenceContext();
+
+  const timeDurationM = useMemo(() => timeDuration, [timeDuration]);
+  const sequenceScaleM = useMemo(() => sequenceScale, [sequenceScale]);
+  const timeTicksM = useMemo(() => timeTicks, [timeTicks]);
   return (
-    <div className="relative border-b-2 border-gray-400" style={{ width: timeDuration / sequenceScale }}>
-      {timeTicks.map((tick) => (
-        <Timetick key={tick} tick={tick} timeScale={sequenceScale} />
+    <div className="relative border-b-2 border-gray-400" style={{ width: timeDurationM / sequenceScaleM }}>
+      {timeTicksM.map((tick) => (
+        <Timetick key={tick} tick={tick} timeScale={sequenceScaleM} />
       ))}
     </div>
   );

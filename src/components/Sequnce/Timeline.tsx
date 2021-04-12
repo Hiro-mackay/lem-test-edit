@@ -1,4 +1,4 @@
-import React, { FC, memo } from 'react';
+import React, { FC, memo, useMemo } from 'react';
 
 interface TimelineProps {
   sequenceScale: number;
@@ -7,6 +7,10 @@ interface TimelineProps {
 }
 
 export const Timeline: FC<TimelineProps> = memo(({ sequenceScale, length, title }) => {
+  const sequenceScaleM = useMemo(() => sequenceScale, [sequenceScale]);
+  const lengthM = useMemo(() => length, [length]);
+  const titleM = useMemo(() => title, [title]);
+
   return (
     <div
       className="bg-yellow-600 cursor-move box-border p-2 rounded-lg"

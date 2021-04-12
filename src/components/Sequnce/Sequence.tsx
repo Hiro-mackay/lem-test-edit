@@ -1,4 +1,4 @@
-import React, { FC, memo, useEffect, useState } from 'react';
+import React, { FC, memo, useCallback, useMemo } from 'react';
 import { ReactSortable } from 'react-sortablejs';
 import { useSequenceContext } from '../../context/Sequence';
 import { Timeline } from './Timeline';
@@ -8,20 +8,26 @@ export const Sequence: FC = memo(() => {
   const { Lem, canvas } = useLemContext();
   const { sequenceScale } = useSequenceContext();
 
+  const list = useMemo(() => Lem.canvas.resources, [Lem.canvas.resources]);
+
+  const reload = useCallback((state) => {
+    Lem.canvas.reloadResources(state);
+  }, []);
+
   return (
     <ReactSortable
       className="flex flex-nowrap w-min"
-      list={canvas.resources}
+      list={list}
       setList={(state) => {
-        Lem.canvas.setResources(state);
+        reload(state);
       }}
       swapThreshold={0.8}
       ghostClass="bg-green-300"
       animation={300}
       delay={1}
     >
-      {canvas.resources.map((item) => (
-        <Timeline key={item.id} title={`${item.id}`} length={item.outFrame} sequenceScale={sequenceScale} />
+      {list.map((item) => (
+        <Timeline key={item.id} title={`${item.file.name}`} length={item.outFrame} sequenceScale={sequenceScale} />
       ))}
     </ReactSortable>
   );

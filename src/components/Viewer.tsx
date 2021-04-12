@@ -1,9 +1,39 @@
-import React, { FC, memo, useEffect, useRef, useState } from 'react';
+import React, { FC, memo, useEffect, useRef, useCallback, useState } from 'react';
 import { useLemContext } from '../context/Lem';
 
 export const Viewer: FC = memo(() => {
   const ref = useRef<HTMLCanvasElement>();
   const { Lem, canvas } = useLemContext();
+  const [src, setSrc] = useState('');
+
+  const play = useCallback(() => {
+    Lem.play();
+  }, []);
+
+  const pause = useCallback(() => {
+    Lem.pause();
+  }, []);
+
+  const stop = useCallback(() => {
+    Lem.stop();
+  }, []);
+
+  const convert = useCallback(async () => {
+    setSrc('');
+    try {
+      const _src = await Lem.Transformer.concat();
+      console.log(_src);
+      setSrc(_src);
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  const dlVideo = useCallback(() => {
+    if (!src) return;
+
+    Lem.Transformer.DLVideo(src);
+  }, [src]);
 
   useEffect(() => {
     if (ref) {
@@ -41,13 +71,32 @@ export const Viewer: FC = memo(() => {
         />
       </label>
       <div className="pt-5">
-        <input type="button" value="再生" onClick={Lem.play} />
+        <input type="button" value="再生" onClick={play} />
       </div>
       <div className="pt-5">
-        <input type="button" value="停止" onClick={Lem.pause} />
+        <input type="button" value="停止" onClick={pause} />
       </div>
       <div className="pt-5">
-        <input type="button" value="リセット" onClick={Lem.stop} />
+        <input type="button" value="リセット" onClick={stop} />
+      </div>
+      <div className="pt-5">
+        {src ? (
+          <>
+            <input type="button" value="ダウンロード" onClick={dlVideo} />
+            {src}
+          </>
+        ) : (
+          <input type="button" value="コンバート" onClick={convert} />
+        )}
+      </div>
+      <div className="pt-5">
+        <input
+          type="button"
+          value="Reset DL Link"
+          onClick={() => {
+            setSrc('');
+          }}
+        />
       </div>
     </>
   );

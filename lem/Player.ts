@@ -1,19 +1,14 @@
 import { Canvas } from './Canvas';
 import { getVideoCurrentTime } from './utiles';
 
-interface Entity {
+export interface Player {
   canvas: Canvas;
   isComplaed: boolean;
   paused: boolean;
   updater: () => void;
 }
 
-export class Player implements Entity {
-  canvas: Canvas;
-  isComplaed: boolean;
-  paused: boolean;
-  updater: () => void;
-
+export class Player {
   private complaed() {
     this.isComplaed = false;
 

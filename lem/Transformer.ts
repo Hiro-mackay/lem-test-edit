@@ -3,20 +3,14 @@ import { Canvas } from './Canvas';
 import { Dispatcher, TransformerEntity } from './types';
 import { getVideoRecource } from './utiles';
 
-interface Entity extends TransformerEntity {
+export interface Transformer extends TransformerEntity {
   ffmpeg: FFmpeg;
   canvas: Canvas;
   dispatch: Dispatcher<TransformerEntity>;
   duration: number;
 }
 
-export class Transformer implements Entity {
-  ffmpeg: FFmpeg;
-  canvas: Canvas;
-  dispatch: Dispatcher<TransformerEntity>;
-  progress: number;
-  duration: number;
-
+export class Transformer {
   constructor(canvas: Canvas) {
     this.ffmpeg = createFFmpeg({
       log: process.env.NODE_ENV === 'development',
@@ -54,7 +48,9 @@ export class Transformer implements Entity {
         throw new Error('Not set some files');
       }
 
-      await this.ffmpeg.load();
+      if (!this.ffmpeg.isLoaded()) {
+        await this.ffmpeg.load();
+      }
 
       const inputPath: string[] = [];
 
