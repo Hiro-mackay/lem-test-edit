@@ -7,12 +7,7 @@ export const Studio = memo(() => {
   return (
     <div className="w-full min-h-screen bg-gray-700">
       <div className="grid grid-cols-1">
-        <div
-          className="p-24 box-border w-full max-w-6xl"
-          style={{
-            height: 900
-          }}
-        >
+        <div className="pt-10 pl-24 pb-14 box-border w-full max-w-3xl">
           <Viewer />
         </div>
       </div>

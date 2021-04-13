@@ -59,27 +59,29 @@ export const Viewer: FC = memo(() => {
           </canvas>
         </div>
       </div>
-      <p className="text-white pt-4">{canvas.currentTime}</p>
-      <label className="mt-5 bg-white inline-block">
-        動画追加
-        <input
-          type="file"
-          hidden
-          onChange={(e) => {
-            Lem.loadAsset(e.currentTarget.files[0]);
-          }}
-        />
-      </label>
-      <div className="pt-5">
+      <p className="text-white pt-4">{canvas.currentTime / 1000}秒</p>
+      <p className="inline-block pr-2">
+        <label className="mt-5 py-1 bg-white">
+          動画追加
+          <input
+            type="file"
+            hidden
+            onChange={(e) => {
+              Lem.loadAsset(e.currentTarget.files[0]);
+            }}
+          />
+        </label>
+      </p>
+      <div className="pt-5 inline-block pr-2">
         <input type="button" value="再生" onClick={play} />
       </div>
-      <div className="pt-5">
+      <div className="pt-5 inline-block pr-2">
         <input type="button" value="停止" onClick={pause} />
       </div>
-      <div className="pt-5">
+      <div className="pt-5 inline-block pr-2">
         <input type="button" value="リセット" onClick={stop} />
       </div>
-      <div className="pt-5">
+      <div className="pt-5 inline-block pr-2">
         {src ? (
           <>
             <input type="button" value="ダウンロード" onClick={dlVideo} />
@@ -89,7 +91,7 @@ export const Viewer: FC = memo(() => {
           <input type="button" value="コンバート" onClick={convert} />
         )}
       </div>
-      <div className="pt-5">
+      <div className="pt-5 inline-block">
         <input
           type="button"
           value="Reset DL Link"

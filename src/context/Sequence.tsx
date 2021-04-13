@@ -35,7 +35,7 @@ export const SequenceProvider: FC = memo(({ children }) => {
   const { canvas } = useLemContext();
   const [timeDuration, setTimeDuration] = useState(DEFAULT_TIME);
   const [timeTicks, setTimeTicks] = useState(createTimeTicks(timeDuration));
-  const [sequenceScale, setSequenceScale] = useState(10);
+  const [sequenceScale, setSequenceScale] = useState(15);
 
   useEffect(() => {
     if (timeDuration < DEFAULT_TIME) return;
